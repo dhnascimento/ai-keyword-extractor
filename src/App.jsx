@@ -18,22 +18,19 @@ function App() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo-instruct',
+        model: 'llama3',
         prompt: 'Extract keywords from this text. Make the first letter of each word uppercase and separate with commas.\n\n' + text + '',
-        temperature: 0.5,
-        max_tokens: 60,
-        frequency_penalty: 0.8
+        stream: false
       })
     }
 
-    const response = await fetch(import.meta.env.VITE_OPENAI_API_URL, options);
+    const response = await fetch(import.meta.env.VITE_OLLAMA_API_URL, options);
 
     const json = await response.json();
+    const data = json.response.trim();
 
-    const data = json.choices[0].text.trim();
     setKeywords(data);
     setLoading(false);
   }
